@@ -1,7 +1,8 @@
 import axios from "axios";
 import genres from "../data/genres";
-import { useQuery } from "react-query";
-import useData from "./useData";
+import { useQuery } from "@tanstack/react-query";
+import useData, { FetchResponse } from "./useData";
+import apiClient from "../services/api-client";
 
 export interface Genre {
   id: number;
@@ -12,14 +13,12 @@ export interface Genre {
 
 const useGenre = () => {
   return useQuery({
-    queryKey: "genres",
+    queryKey: ["genres"],
     queryFn: () =>
       axios
-        .get("https://api.rawg.io/api/", {
-          params: {
-            key: "99e1733bb6bf4a31a8d60fa4d00c7413",
-          },
-        })
+        .get<FetchResponse<Genre>>(
+          "https://api.rawg.io/api/genres?key=99e1733bb6bf4a31a8d60fa4d00c7413"
+        )
         .then((res) => res.data),
   });
 };
