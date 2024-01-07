@@ -15,14 +15,10 @@ const useGenre = () => {
   return useQuery({
     queryKey: ["genres"],
     queryFn: () =>
-      axios
-        .get<FetchResponse<Genre>>(
-          "https://api.rawg.io/api/genres?key=99e1733bb6bf4a31a8d60fa4d00c7413"
-        )
-        .then((res) => res.data),
+      apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
+    staleTime: 24 * 60 * 60 * 1000, // This is 24 hrs
+    initialData: { count: genres.length, results: genres },
   });
 };
-
-// const useGenre = () => ({ data: genres, isLoading: false, error: null });
 
 export default useGenre;
